@@ -84,7 +84,7 @@ class Authcontroller extends Controller
                     $usuario->password = Hash::make($password);
                     $usuario->email = $email;
                     $usuario->team_id = 1;
-                    $usuario->rol = "admin";
+                    $usuario->rol = "usuario";
                     $usuario->save();
                     
                     $userID = $usuario->id;
@@ -95,7 +95,7 @@ class Authcontroller extends Controller
                     $usuario->password = Hash::make($password);
                     $usuario->email = $email;
                     $usuario->team_id = 2;
-                    $usuario->rol = "bi";
+                    $usuario->rol = "usuario";
                     $usuario->save();
 
                     $userID = $usuario->id;
@@ -105,7 +105,7 @@ class Authcontroller extends Controller
                     $usuario->username = $username;
                     $usuario->password = Hash::make($password);
                     $usuario->email = $email;
-                    $usuario->team_id = 3;
+                    // $usuario->team_id = 3;
                     $usuario->rol = "agente";
                     $usuario->save();
 

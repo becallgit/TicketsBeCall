@@ -16,8 +16,9 @@
     
 @section('content')
 <div class="equipos-container {{ $userRole != 'admin' || (isset($ticketsPorEquipo) && $ticketsPorEquipo->count() == 1) ? 'centrado' : '' }}">
-        @if ($userRole == 'admin')
-            @foreach ($ticketsPorEquipo as $equipo)
+    @if ($userRole == 'admin')
+        @foreach ($ticketsPorEquipo as $equipo)
+            @if ($equipo->nombre != 'Formacion') 
                 <div class="equipo">
                     <div class="team-title">{{ $equipo->nombre }}</div>
                     <div class="tarjetas-container">
@@ -31,29 +32,31 @@
                         </div>
                     </div>
                 </div>
-            @endforeach
-        @elseif ($userRole == 'agente')
+            @endif
+        @endforeach
+    @elseif ($userRole == 'agente')
         <div class="section">
             <h2>Bienvenid@ a la App de Tickets de Be Call</h2>
 
             <p>En esta aplicación puedes realizar tus solicitudes de manera rápida y sencilla. Si tienes alguna duda, accede al apartado de ayuda en el menú desplegable que aparece al pasar el cursor sobre tu nombre de usuario, ubicado en la parte superior derecha de la pantalla.</p>
         </div>
-        @else
-            <div class="equipo">
-                <div class="team-title">{{ $teamName }}</div>
-                <div class="tarjetas-container">
-                    <div class="tarjeta">
-                        <div class="texto">Solicitudes Abiertas</div>
-                        <div class="numero">{{ $ticketsAbiertos }}</div>
-                    </div>
-                    <div class="tarjeta">
-                        <div class="texto">Solicitudes Sin Asignar</div>
-                        <div class="numero">{{ $ticketsSinAsignar }}</div>
-                    </div>
+    @else
+        <div class="equipo">
+            <div class="team-title">{{ $teamName }}</div>
+            <div class="tarjetas-container">
+                <div class="tarjeta">
+                    <div class="texto">Solicitudes Abiertas</div>
+                    <div class="numero">{{ $ticketsAbiertos }}</div>
+                </div>
+                <div class="tarjeta">
+                    <div class="texto">Solicitudes Sin Asignar</div>
+                    <div class="numero">{{ $ticketsSinAsignar }}</div>
                 </div>
             </div>
-        @endif
-    </div>
+        </div>
+    @endif
+</div>
+
 @endsection
 <script>
     var team_id = {{auth()->user()->team_id}}

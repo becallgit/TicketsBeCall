@@ -90,7 +90,7 @@
 <img class="imagen" src="{{ asset('images/logolargo.png') }}" width="330">
 <form method="POST" action="{{ route('login.custom') }}" class="form">
 
-       <p class="form-title">TICKETS BE CALL</p>
+       <p class="form-title">BE HELP</p>
         <div class="input-container">
             @csrf
             <input type="text" placeholder="Usuario de Active Directory" id="username"  name="username" required autofocus>

@@ -267,12 +267,12 @@
         }
         #motivo_pausa_container{
             
-            margin-left:2vw;
+            margin-left:1vw;
             margin-bottom: 15px;
         }
         #depend{
             
-            margin-left:4.7vw;
+            margin-left:4.2vw;
             margin-bottom: 15px;
         }
         .form-group label {

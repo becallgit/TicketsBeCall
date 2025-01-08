@@ -601,6 +601,7 @@ class TicketController extends Controller
                         $ticketDependiente->estado = 'Abierto';
                         $ticketDependiente->save();
                     }
+                
                     $dependTicket->delete();
                 }
     

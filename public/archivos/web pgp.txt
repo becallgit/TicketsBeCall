@@ -1,0 +1,101 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ApiController;
+use App\Http\Controllers\CrearEnlaceController;
+use App\Http\Controllers\passController;
+use App\Http\Controllers\AuthADcontroller;
+use App\Http\Controllers\AccesoMenuController;
+use App\Http\Controllers\MenuIntegracionesController;
+use App\Http\Middleware\SatinizarUrlMiddleware;
+use App\Http\Controllers\EnlacePassController;
+use App\Http\Controllers\ProxyPacGeneratorController;
+use App\Http\Controllers\S3Controller;
+use App\Http\Controllers\GrabacionesController;
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('/', function () {
+    return redirect()->route('menu.ver');
+});
+
+
+Route::get('/zapier/repsol', [ApiController::class, 'show']);
+
+
+Route::get('/ingreso/{username}', [passController::class, 'showForm'])->name("ingreso")->where('username', '.*');
+Route::post('/ingreso/{username}', [passController::class, 'ingresar'])->where('username', '.*');
+
+
+Route::get('error', [passController::class, 'error'])->name("error.view");
+Route::get('errorCode', [passController::class, 'CodigoMal'])->name("codigo.error");
+Route::post('/codigo/{telefono}', [passController::class, 'codigoSMS'])->name("enviar.codigo");
+Route::post('/verif', [passController::class, 'verificarCodigo'])->name("verificar");
+
+Route::get('Login', [AuthADcontroller::class, 'signOut'])->name('signout');
+Route::post('LoginAD', [ AuthADcontroller::class, 'login'])->name('login.ad');
+Route::get('LoginAD', [ AuthADcontroller::class, 'index'])->name('ver.login');
+
+Route::get('CerrarSesion', [AccesoMenuController::class, 'signOut'])->name('cerrarsesion');
+Route::post('Acceso', [ AccesoMenuController::class, 'login'])->name('acceso.ad');
+Route::get('Acceso', [ AccesoMenuController::class, 'index'])->name('acceso.ver');
+
+
+
+Route::get('log-in', [EnlacePassController::class, 'loginpass'])->name("pass.login");
+
+Route::post('MostrarEnlace', [EnlacePassController::class, 'CrearEnlace'])->name("mostrar.enlace");
+Route::get('/secretPass/{secret}/{hash}', [EnlacePassController::class, 'mostrarPass'])->name("mostrar.pass");
+
+
+Route::post('BotonEnlace', [CrearEnlaceController::class, 'BotonCrearEnlace'])->name("boton.enlace");
+
+Route::get('ERROR', [AccesoMenuController::class, 'accesoDenegado'])->name('acceso.denegado');
+Route::middleware(['auth.api','checkip'])->group(function () {
+    Route::get('MenuIntegraciones', [ MenuIntegracionesController::class, 'index'])->name('menu.ver');
+    Route::get('enlace', [ MenuIntegracionesController::class, 'enlace'])->name('enlace');
+    Route::get('crear-enlace', [CrearEnlaceController::class, 'index'])->name("vista-crear");
+    Route::post('crear', [ CrearEnlaceController::class, 'GenerarEnlace'])->name('crear.enlace');
+    Route::get('crear-pass', [EnlacePassController::class, 'VerCrearPass'])->name("crear.pass");
+    Route::get('/Menu', [AccesoMenuController::class, 'verMenuUsuarios'])->name("menu.users");
+    Route::get('/subir-archivo', [S3Controller::class, 'showSubirArchivo'])->name('subir.archivo.form');
+    Route::post('/subir-archivo', [S3Controller::class, 'subirArchivo'])->name('subir.archivo');
+    Route::get('/listar-archivos', [S3Controller::class, 'listarArchivos'])->name('listar.archivos');
+    Route::get('/descargar-archivo/{nombreArchivo}', [S3Controller::class, 'descargarArchivo'])->name('descargar.archivo');
+    Route::get('/download-form', [GrabacionesController::class, 'showForm'])->name('download.form');
+    
+    Route::get('/ProxyPacGenerator', [ProxyPacGeneratorController ::class, 'index'])->name("ver.proxy");
+    Route::post('/generar-pac', [ProxyPacGeneratorController::class, 'generate'])->name('generate.pac');
+    Route::get('/listado', [ProxyPacGeneratorController ::class, 'listar'])->name("ver.listado");
+    
+    Route::get('/editar/{archivo}', [ProxyPacGeneratorController::class, 'editar'])->name('editar.pac');
+    Route::post('/guardar/{archivo}', [ProxyPacGeneratorController::class, 'guardar'])->name('guardar.pac');
+    Route::delete('/eliminar/{archivo}', [ProxyPacGeneratorController::class, 'eliminar'])->name('eliminar.pac');
+    Route::get('/exportar/{archivo}', [ProxyPacGeneratorController::class, 'exportarCSV'])->name('exportar.csv');
+    Route::post('/importar-csv', [ProxyPacGeneratorController::class, 'importarCSV'])->name('importar.csv');
+    Route::post('/importar-editar/{archivo}', [ProxyPacGeneratorController::class, 'ImportarCSVenEditar'])->name('importar.editar');
+    
+    
+    
+    Route::get('/buscar', function () {
+        return view('proxy.ProxyGenerator');
+    })->name('buscar.form');
+    
+    Route::post('/buscar', [ProxyPacGeneratorController::class, 'buscarDominios'])->name('buscar.dominios');
+    Route::post('/exportar', [ProxyPacGeneratorController::class, 'exportarDominios'])->name('exportar.dominios');
+    
+});
+
+
+Route::post('/api/descargar-grabacion', [GrabacionesController::class, 'descargarByApi'])->name('api.descargar.grabacion');
+
+Route::post('/download', [GrabacionesController::class, 'descargarGrabacion'])->name('download');
+Route::get('/check-download-status', [GrabacionesController::class, 'checkDownloadStatus'])->name('check_download_status');

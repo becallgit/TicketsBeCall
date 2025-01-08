@@ -39,12 +39,17 @@ class TicketController extends Controller
 
     //funcion para guardar los datos al crear un ticket nuevo
     public function GuardarTicket(Request $request) {
-        try{
-            $request->validate([
-                'archivos.*' => 'file|mimes:jpg,png,pdf,docx,xlsx,csv|max:2048', 
-            ]);
+        try {
         
-           
+            $request->validate([
+                'archivos.*' => 'file|mimes:jpeg,jpg,png,pdf,docx,xlsx,csv,html,txt|max:2048',
+            ], [
+                'archivos.*.file' => 'El archivo debe ser un archivo válido.',
+                'archivos.*.mimes' => 'El archivo debe ser de tipo: jpeg, jpg, png, pdf, docx, xlsx, txt, csv o html.',
+                'archivos.*.max' => 'El archivo no debe exceder los 2MB.',
+            ]);
+            
+     
             $ticket = new Ticket();
             $ticket->solicitante = Auth::user()->username;
             $ticket->team_id = $request->input('team_id');
@@ -57,32 +62,34 @@ class TicketController extends Controller
             $ticket->estado = "Abierto";
             $ticket->team_id = $request->input('team_id');
             $ticket->creado = Carbon::now()->format('Y-m-d H:i:s');
-        
+    
         
             if ($request->hasFile('archivos')) {
                 $nombresArchivos = [];
-        
+    
                 foreach ($request->file('archivos') as $archivo) {
-                  
                     $nombreArchivo = $archivo->getClientOriginalName();
-                    $archivo->storeAs('', $nombreArchivo, 'public'); 
-                    
+                    $archivo->storeAs('', $nombreArchivo, 'public');
                     $nombresArchivos[] = $nombreArchivo;
                 }
-        
     
                 $ticket->archivo = json_encode($nombresArchivos);
             }
+    
         
             $ticket->save();
             $message = "¡Se ha abierto un nuevo ticket!";
-            broadcast(new NotifyGroup($message,$ticket->team_id));
-        
-             return redirect()->route('ticket.mostrado', ['ticket' => $ticket->id])->with('success', 'Ticket creado con éxito.');
-        }catch(Exception $e){
+            broadcast(new NotifyGroup($message, $ticket->team_id));
+    
+         
+            return redirect()->route('ticket.mostrado', ['ticket' => $ticket->id])->with('success', 'Ticket creado con éxito.');
+    
+        }  catch (Exception $e) {
+            $request->session()->flash('error',  $e->getMessage());
             Log::error('Error al crear el ticket: ' . $e->getMessage());
+            return back()->withErrors($e->errors())->withInput();
+
         }
-        
     }
     
     //vista que muestra la "previa" de un ticket

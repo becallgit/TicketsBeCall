@@ -92,7 +92,10 @@
             </div>
         </div>
 
-    
+        @if(session('errors'))
+            <div  class="alert alert-danger">{{ session('error') }}</div>
+        @endif
+<br>
         <div class="form-group">
             <button type="submit" class="submit-btn">Crear Ticket</button>
         </div>
@@ -180,7 +183,15 @@
         .form-group .submit-btn:hover {
             background-color: #e69428;
         }
-
+        .alert{
+            background-color:#f7c2c1;
+            color:red;
+            border:2px solid red;
+            border-radius:5px;
+            padding:7px;
+            font-weight:bold;
+            text-align:center;
+        }
         @media (min-width: 600px) {
             .form-group {
                 flex-direction: row;

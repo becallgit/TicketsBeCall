@@ -42,7 +42,7 @@
                 <li class="dropdown">
                     <a href="#"><i class="fa-solid fa-chalkboard-user"></i>&nbsp;&nbsp;Formación</a>
                     <div class="dropdown-content" style="width:170px;">
-                        <a href="{{ route('tickets.export') }}"> <i class="fa-solid fa-file-excel"></i><span style="font-size:14px;"> Exportar Forms</span></a>
+                        <a href="{{ route('forms.export') }}"> <i class="fa-solid fa-file-excel"></i><span style="font-size:14px;"> Exportar Forms</span></a>
                         <a href="{{ route('ver.formacion') }}"> <i class="fa-solid fa-bullhorn"></i><span style="font-size:14px;"> Nueva Formación</span></a>
                         <a href="{{ route('listado.forms') }}"><i class="fa-regular fa-rectangle-list"></i><span style="font-size:14px;"> Solicitudes</span></a>
                     </div>

@@ -81,6 +81,7 @@
                         @endif
                         </td>
                         <td class="acciones">
+                        @if(Auth::user()->rol == "admin")
                             <a href="{{ route('ver.Editar.forms', $form->id) }}" class="icono" title="Editar Formacion"><i class="fa-solid fa-pen-to-square"></i></a> 
                     
                             |&nbsp;<form   action="/formsdel/{{ $form->id }}" method="POST" style="display: inline;">
@@ -88,6 +89,7 @@
                                 @method('delete')
                                 <button type="submit" class="icono borrar"  title="Eliminar Formacion"><i class="fa-solid fa-trash"></i></button>
                             </form>&nbsp;|
+                            @endif
                             <a href="{{ route('ver.form', $form->id) }}" class="icono"  title="Ver Formacion"><i class="fa-solid fa-eye"></i></a>&nbsp;|&nbsp;
                             <a href="{{ route('cerrar.formacion', $form->id) }}" class="icono"  title="Cerrar Formacion"><i class="fa-solid fa-door-closed"></i></a>
 

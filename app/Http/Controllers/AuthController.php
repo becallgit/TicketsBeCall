@@ -100,6 +100,17 @@ class Authcontroller extends Controller
 
                     $userID = $usuario->id;
                     Auth::loginUsingId($userID);
+                }else if (isset($ResponseInfo['grupo']) && stripos($ResponseInfo['grupo'], 'FormacionTicket') !== false) {
+                    $usuario = New User();
+                    $usuario->username = $username;
+                    $usuario->password = Hash::make($password);
+                    $usuario->email = $email;
+                    $usuario->team_id = 3;
+                    $usuario->rol = "usuario";
+                    $usuario->save();
+
+                    $userID = $usuario->id;
+                    Auth::loginUsingId($userID);
                 }else{
                     $usuario = New User();
                     $usuario->username = $username;

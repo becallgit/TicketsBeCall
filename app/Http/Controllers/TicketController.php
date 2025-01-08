@@ -402,7 +402,7 @@ class TicketController extends Controller
         
         $ticket->delete();
     
-        return redirect()->route('ver.solicitudes.totales');
+        return redirect()->back()->with('success', 'Archivo eliminado con éxito.');
         }catch(Exception $e){
             Log::error('Error al eliminar el ticket  con id: '.$id . "con mensaje" . $e->getMessage());
         }
